@@ -20,7 +20,7 @@
 #include "driverlib/sysctl.h"
 #include "utils/uartstdio.h"
 
-#define N 100
+#define N 10
 
 typedef struct filaint_t
 {
@@ -220,7 +220,7 @@ void testafila()
 
    UARTprintf ("Testes de remocao funcionaram!\n");
 
-#ifdef NAODEFINIDO
+
    // PARTE 3: operações inválidas =============================================
 
    // inicializa os N elementos
@@ -277,8 +277,10 @@ void testafila()
    UARTprintf ("Ok, não deixou inserir elemento que está em outra fila\n") ;
 
    // criar uma grande fila com entradas dinamicas
+   // FIXME: Depurar problema com o malloc
+   /*
    fila0 = NULL ;
-   for (i=0; i< N*N; i++)
+   for (i=0; i< N; i++)
    {
       aux = (filaint_t*) malloc (sizeof (filaint_t)) ;
       aux->id = i ;
@@ -286,23 +288,24 @@ void testafila()
       queue_append ((queue_t**) &fila0, (queue_t*) aux) ;
       assert (fila_correta (fila0)) ;
    }
-   UARTprintf ("Ok, criei uma fila com %d elementos ordenados\n", N*N) ;
+   UARTprintf ("Ok, criei uma fila com %d elementos ordenados\n", N) ;
 
-   // retirar e destruir cada elemento da fila, em sequencia
-   for (i=0; i< N*N; i++)
+   // Retirar e destruir cada elemento da fila, em sequencia
+   for (i=0; i< N; i++)
    {
       aux = (filaint_t *) queue_remove ((queue_t**) &fila0, (queue_t*) fila0) ;
       assert (fila_correta (fila0)) ;
       assert (aux->id == i) ;
       free (aux) ;
    }
-   UARTprintf ("Ok, retirei e destrui em ordem %d elementos da fila\n", N*N) ;
+   UARTprintf ("Ok, retirei e destrui em ordem %d elementos da fila\n", N) ;
+   */
 
-   UARTprintf ("Testes de operações inválidas funcionaram!\n") ;
+   UARTprintf ("Testes de operações inválidas funcionaram!\n");
 
    // PARTE 4: queue_print =====================================================
 
-   //UARTprintf ("Teste do queue_print...\n");
+   UARTprintf ("Teste do queue_print...\n");
 
    // inicializa os N elementos
    for (i=0; i<N; i++)
@@ -329,6 +332,5 @@ void testafila()
 
    UARTprintf ("Testes concluidos!!!\n") ;
 
-   exit(0) ;
-#endif
+   return;
 }

@@ -3,7 +3,6 @@
 // Version 1.0 - March 2020
 
 #include "queue.h"
-#include <stdio.h>
 
 #define printf UARTprintf
 
@@ -13,17 +12,17 @@ int __queue_has_elem(queue_t **queue, queue_t *elem);
 
 void queue_append(queue_t **queue, queue_t *elem) {
   if (queue == NULL) {
-    fprintf(stderr, "ERROR(queue_append): queue does not exist\n");
+    UARTprintf("ERROR(queue_append): queue does not exist\n");
     return;
   }
 
   if (elem == NULL) {
-    fprintf(stderr, "ERROR(queue_append): element does not exist\n");
+    UARTprintf("ERROR(queue_append): element does not exist\n");
     return;
   }
 
   if (elem->next != NULL || elem->prev != NULL) {
-    fprintf(stderr, "ERROR(queue_append): element belongs to another queue\n");
+    UARTprintf("ERROR(queue_append): element belongs to another queue\n");
     return;
   }
 
@@ -47,23 +46,22 @@ void queue_append(queue_t **queue, queue_t *elem) {
 
 queue_t *queue_remove(queue_t **queue, queue_t *elem) {
   if (queue == NULL) {
-    fprintf(stderr, "ERROR(queue_remove): queue does not exist\n");
+    UARTprintf("ERROR(queue_remove): queue does not exist\n");
     return NULL;
   }
 
   if (queue_size(*queue) == 0) {
-    fprintf(stderr, "ERROR(queue_remove): queue is empty\n");
+    UARTprintf("ERROR(queue_remove): queue is empty\n");
     return NULL;
   }
 
   if (elem == NULL) {
-    fprintf(stderr, "ERROR(queue_remove): element does not exist\n");
+    UARTprintf("ERROR(queue_remove): element does not exist\n");
     return NULL;
   }
 
   if (!__queue_has_elem(queue, elem)) {
-    fprintf(stderr,
-            "ERROR(queue_remove): element does not belong to the queue\n");
+    UARTprintf("ERROR(queue_remove): element does not belong to the queue\n");
     return NULL;
   }
 

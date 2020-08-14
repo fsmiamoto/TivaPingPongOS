@@ -4,12 +4,10 @@
 
 // Programa de teste da implementação de fila genérica queue.c/queue.h.
 
-//#define printf UARTprintf
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "queue.h"
-
 #include <stdint.h>
 #include <stdbool.h>
 #include "inc/hw_memmap.h"
@@ -20,7 +18,6 @@
 #include "driverlib/rom.h"
 #include "driverlib/rom_map.h"
 #include "driverlib/sysctl.h"
-//#include "driverlib/uart.h"
 #include "utils/uartstdio.h"
 
 #define N 100
@@ -35,13 +32,9 @@ typedef struct filaint_t
 filaint_t item[N];
 filaint_t *fila0, *fila1, *aux, *final ;
 
-//------------------------------------------------------------------------------
-
-// imprime na tela um elemento da fila (chamada pela função queue_print)
 void print_elem (void *ptr)
 {
    filaint_t *elem = ptr ;
-
    if (!elem)
       return ;
 
@@ -49,8 +42,6 @@ void print_elem (void *ptr)
    UARTprintf ("<%d>", elem->id) ;
    elem->next ? UARTprintf ("%d", elem->next->id) : UARTprintf ("*") ;
 }
-
-//------------------------------------------------------------------------------
 
 // retorna 1 se a estrutura da fila está correta, 0 senão
 int fila_correta (filaint_t *fila)
@@ -101,9 +92,6 @@ int fila_correta (filaint_t *fila)
    return 1 ;
 }
 
-//------------------------------------------------------------------------------
-
-//int main (int argc, char **argv, char **envp)
 void testafila()
 {
     int i ;
@@ -146,11 +134,11 @@ void testafila()
 
    UARTprintf("Testes de insercao funcionaram!\n");
 
-#ifdef NAODEFINIDO
+
    // PARTE 2: queue_remove ====================================================
 
-   // esvazia fila0, retirando sempre o primeiro elemento
-   //printf ("Remocao %d vezes o primeiro elemento...\n", N) ;
+   // Esvazia fila0, retirando sempre o primeiro elemento
+   UARTprintf ("Remocao %d vezes o primeiro elemento...\n", N) ;
    i=0 ;
    while (i<N)
    {
@@ -163,15 +151,15 @@ void testafila()
       i++ ;
    }
    assert (fila0 == NULL) ;             // fila deve estar vazia
-   //printf ("Ok, apos %d remocoes a fila ficou vazia\n", N) ;
+   UARTprintf ("Ok, apos %d remocoes a fila ficou vazia\n", N) ;
 
-   // reconstroi fila de teste
+   // Reconstrói fila de teste
    fila0 = NULL ;
    for (i=0; i<N; i++)
       queue_append ((queue_t**) &fila0, (queue_t*) &item[i]) ;
 
-   // esvazia fila0, retirando sempre o segundo elemento
-   //printf ("Remocao %d vezes o segundo elemento...\n", N) ;
+   // Esvazia fila0, retirando sempre o segundo elemento
+   UARTprintf ("Remocao %d vezes o segundo elemento...\n", N) ;
    i=0 ;
    while (i<N)
    {
@@ -184,15 +172,15 @@ void testafila()
       i++ ;
    }
    assert (fila0 == NULL) ;             // fila deve estar vazia
-   //printf ("Ok, apos %d remocoes a fila ficou vazia\n", N) ;
+   UARTprintf ("Ok, apos %d remocoes a fila ficou vazia\n", N) ;
 
-   // reconstroi fila de teste
+   // Reconstrói fila de teste
    fila0 = NULL ;
    for (i=0; i<N; i++)
       queue_append ((queue_t**) &fila0, (queue_t*) &item[i]) ;
 
-   // esvazia fila0, retirando sempre o último elemento
-   //printf ("Remocao %d vezes o último elemento...\n", N) ;
+   // Esvazia fila0, retirando sempre o último elemento
+   UARTprintf ("Remocao %d vezes o último elemento...\n", N) ;
    i=0 ;
    while (i<N)
    {
@@ -205,18 +193,18 @@ void testafila()
       i++ ;
    }
    assert (fila0 == NULL) ;             // fila deve estar vazia
-   //printf ("Ok, apos %d remocoes a fila ficou vazia\n", N) ;
+   UARTprintf ("Ok, apos %d remocoes a fila ficou vazia\n", N) ;
 
-   // reconstroi fila de teste
+   // Reconstrói fila de teste
    fila0 = NULL ;
    for (i=0; i<N; i++)
       queue_append ((queue_t**) &fila0, (queue_t*) &item[i]) ;
 
-   // remocoes aleatorias
-   //printf ("Remocao %d vezes um elemento aleatório...\n", N) ;
+   // Remoções aleatórias
+   UARTprintf ("Remocao %d vezes um elemento aleatório...\n", N) ;
    while (fila0)
    {
-      i = random() % queue_size ((queue_t*) fila0) ;
+      i = SysCtlClockGet() % queue_size ((queue_t*) fila0) ;
       aux = fila0 ;
       while (i)
       {
@@ -225,11 +213,14 @@ void testafila()
       }
       queue_remove ((queue_t**) &fila0, (queue_t*) aux) ;
    }
-   assert (fila0 == NULL) ;             // fila deve estar vazia
-   //printf ("Ok, apos %d remocoes aleatorias a fila ficou vazia\n", N) ;
 
-   //printf ("Testes de remocao funcionaram!\n") ;
+   // Fila deve estar vazia
+   assert (fila0 == NULL) ;
+   UARTprintf ("Ok, apos %d remocoes aleatorias a fila ficou vazia\n", N) ;
 
+   UARTprintf ("Testes de remocao funcionaram!\n");
+
+#ifdef NAODEFINIDO
    // PARTE 3: operações inválidas =============================================
 
    // inicializa os N elementos
@@ -247,35 +238,35 @@ void testafila()
    queue_append ((queue_t**) &fila1, (queue_t*) &item[1]) ;
 
    // tentar remover elemento que está em outra fila
-   //printf ("Testando remocao de elemento que está em outra fila...\n") ;
+   UARTprintf ("Testando remocao de elemento que está em outra fila...\n") ;
    queue_remove ((queue_t**) &fila0, (queue_t*) &item[1]) ;
    assert (fila0 == &item[0]) ;
    assert (item[0].prev == &item[0]) ;
    assert (item[0].next == &item[0]) ;
    assert (item[1].prev == &item[1]) ;
    assert (item[1].next == &item[1]) ;
-   //printf ("Ok, nao deixou remover um elemento de outra fila\n") ;
+   UARTprintf ("Ok, nao deixou remover um elemento de outra fila\n") ;
 
    // tentar remover elemento que não está em nenhuma fila
-   //printf ("Testando remocao de elemento que não está em nenhuma fila...\n") ;
+   UARTprintf ("Testando remocao de elemento que não está em nenhuma fila...\n") ;
    queue_remove ((queue_t**) &fila0, (queue_t*) &item[2]) ;
    assert (fila0 == &item[0]) ;
    assert (item[0].prev == &item[0]) ;
    assert (item[0].next == &item[0]) ;
    assert (item[2].prev == NULL) ;
    assert (item[2].next == NULL) ;
-   //printf ("Ok, nao deixou remover um elemento que não está em nenhuma fila\n") ;
+   UARTprintf ("Ok, nao deixou remover um elemento que não está em nenhuma fila\n") ;
 
    // tentar inserir algo que já está na mesma fila
-   //printf ("Testando insercao de elemento que já está na fila...\n") ;
+   UARTprintf ("Testando insercao de elemento que já está na fila...\n") ;
    queue_append ((queue_t**) &fila0, (queue_t*) &item[0]) ;
    assert (fila0 == &item[0]) ;
    assert (item[0].prev == &item[0]) ;
    assert (item[0].next == &item[0]) ;
-   //printf ("Ok, não deixou inserir elemento que já estava na fila\n") ;
+   UARTprintf ("Ok, não deixou inserir elemento que já estava na fila\n") ;
 
    // tentar inserir algo que está em outra fila
-   //printf ("Testando insercao de elemento que está em outra fila...\n") ;
+   UARTprintf ("Testando insercao de elemento que está em outra fila...\n") ;
    queue_append ((queue_t**) &fila0, (queue_t*) &item[1]) ;
    assert (fila0 == &item[0]) ;
    assert (item[0].prev == &item[0]) ;
@@ -283,7 +274,7 @@ void testafila()
    assert (fila1 == &item[1]) ;
    assert (item[1].prev == &item[1]) ;
    assert (item[1].next == &item[1]) ;
-   //printf ("Ok, não deixou inserir elemento que está em outra fila\n") ;
+   UARTprintf ("Ok, não deixou inserir elemento que está em outra fila\n") ;
 
    // criar uma grande fila com entradas dinamicas
    fila0 = NULL ;
@@ -295,7 +286,7 @@ void testafila()
       queue_append ((queue_t**) &fila0, (queue_t*) aux) ;
       assert (fila_correta (fila0)) ;
    }
-   //printf ("Ok, criei uma fila com %d elementos ordenados\n", N*N) ;
+   UARTprintf ("Ok, criei uma fila com %d elementos ordenados\n", N*N) ;
 
    // retirar e destruir cada elemento da fila, em sequencia
    for (i=0; i< N*N; i++)
@@ -305,13 +296,13 @@ void testafila()
       assert (aux->id == i) ;
       free (aux) ;
    }
-   //printf ("Ok, retirei e destrui em ordem %d elementos da fila\n", N*N) ;
+   UARTprintf ("Ok, retirei e destrui em ordem %d elementos da fila\n", N*N) ;
 
-   //printf ("Testes de operações inválidas funcionaram!\n") ;
+   UARTprintf ("Testes de operações inválidas funcionaram!\n") ;
 
    // PARTE 4: queue_print =====================================================
 
-   //printf ("Teste do queue_print...\n");
+   //UARTprintf ("Teste do queue_print...\n");
 
    // inicializa os N elementos
    for (i=0; i<N; i++)
@@ -325,7 +316,7 @@ void testafila()
    fila0 = NULL ;
 
    // imprimir a fila
-   //printf ("Saida esperada: []\n") ;
+   UARTprintf ("Saida esperada: []\n") ;
    queue_print ("Saida gerada  ", (queue_t*) fila0, print_elem) ;
 
    // uma fila com 10 elementos
@@ -333,10 +324,10 @@ void testafila()
       queue_append ((queue_t**) &fila0, (queue_t*) &item[i]) ;
 
    // imprimir a fila
-   //printf ("Saida esperada: [9<0>1 0<1>2 1<2>3 2<3>4 3<4>5 4<5>6 5<6>7 6<7>8 7<8>9 8<9>0]\n") ;
+   UARTprintf ("Saida esperada: [9<0>1 0<1>2 1<2>3 2<3>4 3<4>5 4<5>6 5<6>7 6<7>8 7<8>9 8<9>0]\n") ;
    queue_print ("Saida gerada  ", (queue_t*) fila0, print_elem) ;
 
-   //printf ("Testes concluidos!!!\n") ;
+   UARTprintf ("Testes concluidos!!!\n") ;
 
    exit(0) ;
 #endif

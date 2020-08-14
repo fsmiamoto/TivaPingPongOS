@@ -4,11 +4,6 @@
 
 // Programa de teste da implementação de fila genérica queue.c/queue.h.
 
-// operating system check
-//#if defined(_WIN32) || (!defined(__unix__) && !defined(__unix) && (!defined(__APPLE__) || !defined(__MACH__)))
-//#warning Este código foi planejado para ambientes UNIX (LInux, *BSD, MacOS). A compilação e execução em outros ambientes é responsabilidade do usuário.
-//#endif
-
 //#define printf UARTprintf
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,19 +25,11 @@
 
 #define N 100
 
-// A estrutura "filaint_t" será usada com as funções de queue.c usando um
-// casting para o tipo "queue_t". Isso funciona bem, se os campos iniciais
-// de ambas as estruturas forem os mesmos. De acordo com a seção 6.7.2.1 do
-// padrão C99: "Within a structure object, the non-bit-ﬁeld members and the
-// units in which bit-ﬁelds reside have addresses that increase in the order
-// in which they are declared.".
-
 typedef struct filaint_t
 {
-   struct filaint_t *prev ;  // ptr para usar cast com queue_t
-   struct filaint_t *next ;  // ptr para usar cast com queue_t
+   struct filaint_t *prev ;
+   struct filaint_t *next ;
    int id ;
-   // outros campos podem ser acrescidos aqui
 } filaint_t ;
 
 filaint_t item[N];
@@ -58,10 +45,9 @@ void print_elem (void *ptr)
    if (!elem)
       return ;
 
-   elem->prev ? printf ("%d", elem->prev->id) : printf ("*") ;
-//   printf ("<%d>", elem->id) ;
+   elem->prev ? UARTprintf ("%d", elem->prev->id) : UARTprintf ("*") ;
    UARTprintf ("<%d>", elem->id) ;
-   elem->next ? printf ("%d", elem->next->id) : printf ("*") ;
+   elem->next ? UARTprintf ("%d", elem->next->id) : UARTprintf ("*") ;
 }
 
 //------------------------------------------------------------------------------
@@ -82,7 +68,7 @@ int fila_correta (filaint_t *fila)
    // fila com um só elemento, mas incorreta
    if ((fila->next == fila) || (fila->prev == fila))
    {
-  //    printf ("ERRO: ponteiros errados na fila com um elemento\n") ;
+      UARTprintf ("ERRO: ponteiros errados na fila com um elemento\n") ;
       return 0 ;
    }
 
@@ -95,7 +81,7 @@ int fila_correta (filaint_t *fila)
          ; // ponteiro ok
       else
       {
-    //     printf ("ERRO: ponteiros errados ->next ou ->next->prev\n") ;
+         UARTprintf ("ERRO: ponteiros errados ->next ou ->next->prev\n") ;
          return 0 ;
       }
 
@@ -104,7 +90,7 @@ int fila_correta (filaint_t *fila)
          ; // ponteiro ok
       else
       {
-      //   printf ("ERRO: ponteiros errados ->prev ou ->prev->next\n") ;
+         UARTprintf ("ERRO: ponteiros errados ->prev ou ->prev->next\n") ;
          return 0 ;
       }
       aux = aux->next ;
@@ -120,7 +106,6 @@ int fila_correta (filaint_t *fila)
 //int main (int argc, char **argv, char **envp)
 void testafila()
 {
-
     int i ;
 
    // inicializa os N elementos
@@ -134,19 +119,19 @@ void testafila()
    // PARTE 1: queue_append e queue_size =======================================
 
    // Teste: inserir N elemementos na fila e verificar a estrutura
-   //printf ("Testando insercao de %d elementos...\n", N) ;
+   UARTprintf ("Testando insercao de %d elementos...\n", N) ;
    fila0 = NULL ;
    for (i=0; i<N; i++)
    {
-//      assert (queue_size ((queue_t*) fila0) == i) ;
-//      queue_append ((queue_t **) &fila0, (queue_t*) &item[i]) ;
-//      assert (fila_correta (fila0)) ;
-        assert (1) ;
+      assert (queue_size ((queue_t*) fila0) == i) ;
+      queue_append ((queue_t **) &fila0, (queue_t*) &item[i]) ;
+      assert (fila_correta (fila0)) ;
+      assert (1) ;
    }
 
    // Teste: contar o numero de elementos na fila e verificar a ordem
    // dos elementos inseridos
-   //printf ("Testando tamanho da fila e ordem dos %d elementos...\n", N) ;
+   UARTprintf ("Testando tamanho da fila e ordem dos %d elementos...\n", N) ;
    aux = fila0 ;
    i=0 ;
    do

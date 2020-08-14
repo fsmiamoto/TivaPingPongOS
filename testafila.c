@@ -141,15 +141,12 @@ void testafila()
       aux = aux->next ;
    } while (aux != fila0) ;
 
-       i = 0;
    assert (i == N) ;
-
    assert (queue_size ((queue_t*) fila0) == N) ;
-}
+
+   UARTprintf("Testes de insercao funcionaram!\n");
+
 #ifdef NAODEFINIDO
-
-   //printf ("Testes de insercao funcionaram!\n") ;
-
    // PARTE 2: queue_remove ====================================================
 
    // esvazia fila0, retirando sempre o primeiro elemento
@@ -342,6 +339,5 @@ void testafila()
    //printf ("Testes concluidos!!!\n") ;
 
    exit(0) ;
-}
-
 #endif
+}

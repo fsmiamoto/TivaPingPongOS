@@ -60,6 +60,7 @@ main(void)
     ConfigureUART();
 
     UARTprintf("PingPons OS - Queue");
+    testafila();
 
     // We are finished.  Hang around flashing D1.
     while(1)

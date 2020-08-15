@@ -14,6 +14,8 @@
 
 #define printf UARTprintf
 
+void testafila();
+
 // System clock rate in Hz.
 uint32_t g_ui32SysClock;
 

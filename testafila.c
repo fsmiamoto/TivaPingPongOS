@@ -5,23 +5,10 @@
 // Programa de teste da implementação de fila genérica queue.c/queue.h.
 
 #include <assert.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-#include "driverlib/gpio.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/rom.h"
-#include "driverlib/rom_map.h"
-#include "driverlib/sysctl.h"
-#include "drivers/pinout.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
 #include "queue.h"
-#include "utils/uartstdio.h"
 
-#define N 10
+#define N 100
 
 #define printf UARTprintf
 
@@ -120,7 +107,7 @@ void testafila() {
   assert(i == N);
   assert(queue_size((queue_t *)fila0) == N);
 
-  printf("Testes de insercao funcionaram!\n");
+  printf("\nTestes de insercao funcionaram!\n\n");
 
   // PARTE 2: queue_remove ====================================================
 
@@ -197,7 +184,7 @@ void testafila() {
   assert(fila0 == NULL);
   printf("Ok, apos %d remocoes aleatorias a fila ficou vazia\n", N);
 
-  printf("Testes de remocao funcionaram!\n");
+  printf("\nTestes de remocao funcionaram!\n\n");
 
   // PARTE 3: operações inválidas =============================================
 
@@ -253,11 +240,11 @@ void testafila() {
   assert(item[1].next == &item[1]);
   printf("Ok, não deixou inserir elemento que está em outra fila\n");
 
-  printf("Testes de operações inválidas funcionaram!\n");
+  printf("\nTestes de operações inválidas funcionaram!\n");
 
   // PARTE 4: queue_print =====================================================
 
-  printf("Teste do queue_print...\n");
+  printf("\nTeste do queue_print...\n");
 
   // inicializa os N elementos
   for (i = 0; i < N; i++) {
@@ -283,7 +270,7 @@ void testafila() {
       "8<9>0]\n");
   queue_print("Saida gerada  ", (queue_t *)fila0, print_elem);
 
-  printf("Testes concluidos!!!\n");
+  printf("\nTestes concluidos!!!\n\n");
 
   return;
 }

@@ -253,31 +253,6 @@ void testafila() {
   assert(item[1].next == &item[1]);
   printf("Ok, não deixou inserir elemento que está em outra fila\n");
 
-  // criar uma grande fila com entradas dinamicas
-  // FIXME: Depurar problema com o malloc
-  /*
-  fila0 = NULL ;
-  for (i=0; i< N; i++)
-  {
-     aux = (filaint_t*) malloc (sizeof (filaint_t)) ;
-     aux->id = i ;
-     aux->prev = aux->next = NULL ;
-     queue_append ((queue_t**) &fila0, (queue_t*) aux) ;
-     assert (fila_correta (fila0)) ;
-  }
-  printf ("Ok, criei uma fila com %d elementos ordenados\n", N) ;
-
-  // Retirar e destruir cada elemento da fila, em sequencia
-  for (i=0; i< N; i++)
-  {
-     aux = (filaint_t *) queue_remove ((queue_t**) &fila0, (queue_t*) fila0) ;
-     assert (fila_correta (fila0)) ;
-     assert (aux->id == i) ;
-     free (aux) ;
-  }
-  printf ("Ok, retirei e destrui em ordem %d elementos da fila\n", N) ;
-  */
-
   printf("Testes de operações inválidas funcionaram!\n");
 
   // PARTE 4: queue_print =====================================================

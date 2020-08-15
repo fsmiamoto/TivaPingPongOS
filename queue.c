@@ -4,23 +4,25 @@
 
 #include "queue.h"
 
+#define printf UARTprintf
+
 // Internal functions
 queue_t *__get_last_elem(queue_t **queue);
 int __queue_has_elem(queue_t **queue, queue_t *elem);
 
 void queue_append(queue_t **queue, queue_t *elem) {
   if (queue == NULL) {
-    UARTprintf("ERROR(queue_append): queue does not exist\n");
+    printf("ERROR(queue_append): queue does not exist\n");
     return;
   }
 
   if (elem == NULL) {
-    UARTprintf("ERROR(queue_append): element does not exist\n");
+    printf("ERROR(queue_append): element does not exist\n");
     return;
   }
 
   if (elem->next != NULL || elem->prev != NULL) {
-    UARTprintf("ERROR(queue_append): element belongs to another queue\n");
+    printf("ERROR(queue_append): element belongs to another queue\n");
     return;
   }
 
@@ -44,22 +46,22 @@ void queue_append(queue_t **queue, queue_t *elem) {
 
 queue_t *queue_remove(queue_t **queue, queue_t *elem) {
   if (queue == NULL) {
-    UARTprintf("ERROR(queue_remove): queue does not exist\n");
+    printf("ERROR(queue_remove): queue does not exist\n");
     return NULL;
   }
 
   if (queue_size(*queue) == 0) {
-    UARTprintf("ERROR(queue_remove): queue is empty\n");
+    printf("ERROR(queue_remove): queue is empty\n");
     return NULL;
   }
 
   if (elem == NULL) {
-    UARTprintf("ERROR(queue_remove): element does not exist\n");
+    printf("ERROR(queue_remove): element does not exist\n");
     return NULL;
   }
 
   if (!__queue_has_elem(queue, elem)) {
-    UARTprintf("ERROR(queue_remove): element does not belong to the queue\n");
+    printf("ERROR(queue_remove): element does not belong to the queue\n");
     return NULL;
   }
 
@@ -86,8 +88,7 @@ queue_t *queue_remove(queue_t **queue, queue_t *elem) {
 }
 
 int queue_size(queue_t *queue) {
-  if (queue == NULL)
-    return 0;
+  if (queue == NULL) return 0;
 
   int queueSize = 0;
   queue_t *firstElem = queue;
@@ -106,14 +107,14 @@ void queue_print(char *name, queue_t *queue, void (*print_elem)(void *)) {
   int i;
   queue_t *currentElem = queue;
 
-  UARTprintf("%s: [", name);
+  printf("%s: [", name);
   for (i = 0; i < size; i++, currentElem = currentElem->next) {
     print_elem(currentElem);
     if (i < size - 1) {
-      UARTprintf(" ");
+      printf(" ");
     }
   }
-  UARTprintf("]\n");
+  printf("]\n");
 }
 
 // Returns the last element in the queue

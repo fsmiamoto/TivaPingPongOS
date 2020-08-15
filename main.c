@@ -56,11 +56,9 @@ main(void)
     // Enable the GPIO pins for the LED D1 (PN1).
     ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
 
-    // Initialize the UART.
     ConfigureUART();
 
-    UARTprintf("PingPons OS - Queue");
-    testafila();
+    UARTprintf("PingPong OS - Queue");
 
     // We are finished.  Hang around flashing D1.
     while(1)
@@ -70,4 +68,5 @@ main(void)
         LEDWrite(CLP_D1, 0);
         SysCtlDelay(g_ui32SysClock / 10 / 3);
     }
+    testafila();
 }

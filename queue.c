@@ -4,8 +4,6 @@
 
 #include "queue.h"
 
-#define printf UARTprintf
-
 // Internal functions
 queue_t *__get_last_elem(queue_t **queue);
 int __queue_has_elem(queue_t **queue, queue_t *elem);
@@ -108,14 +106,14 @@ void queue_print(char *name, queue_t *queue, void (*print_elem)(void *)) {
   int i;
   queue_t *currentElem = queue;
 
-  printf("%s: [", name);
+  UARTprintf("%s: [", name);
   for (i = 0; i < size; i++, currentElem = currentElem->next) {
     print_elem(currentElem);
     if (i < size - 1) {
-      printf(" ");
+      UARTprintf(" ");
     }
   }
-  printf("]\n");
+  UARTprintf("]\n");
 }
 
 // Returns the last element in the queue

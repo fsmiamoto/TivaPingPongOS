@@ -5,9 +5,10 @@
 // Programa de teste da implementação de fila genérica queue.c/queue.h.
 
 #include <assert.h>
-#include <stdio.h>
+#include <stdint.h>
 
 #include "queue.h"
+#include "utils/ustdlib.h"
 
 #define N 10
 
@@ -172,7 +173,7 @@ void testafila() {
   // Remoções aleatórias
   printf("Remocao %d vezes um elemento aleatório...\n", N);
   while (fila0) {
-    i = RandomSeed() % queue_size((queue_t *)fila0);
+    i = (uint32_t) urand() % queue_size((queue_t *)fila0);
     aux = fila0;
     while (i) {
       i--;

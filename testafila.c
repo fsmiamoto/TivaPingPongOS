@@ -5,10 +5,11 @@
 // Programa de teste da implementação de fila genérica queue.c/queue.h.
 
 #include <assert.h>
+#include <stdio.h>
 
 #include "queue.h"
 
-#define N 100
+#define N 10
 
 #define printf UARTprintf
 
@@ -171,7 +172,7 @@ void testafila() {
   // Remoções aleatórias
   printf("Remocao %d vezes um elemento aleatório...\n", N);
   while (fila0) {
-    i = SysCtlClockGet() % queue_size((queue_t *)fila0);
+    i = RandomSeed() % queue_size((queue_t *)fila0);
     aux = fila0;
     while (i) {
       i--;
@@ -239,6 +240,25 @@ void testafila() {
   assert(item[1].prev == &item[1]);
   assert(item[1].next == &item[1]);
   printf("Ok, não deixou inserir elemento que está em outra fila\n");
+
+  // criar uma grande fila com entradas dinamicas
+  fila0 = NULL;
+  for (i = 0; i < N * N; i++) {
+    aux = (filaint_t *)malloc(sizeof(filaint_t));
+    aux->id = i;
+    aux->prev = aux->next = NULL;
+    queue_append((queue_t **)&fila0, (queue_t *)aux);
+    assert(fila_correta(fila0));
+  }
+  printf("Ok, criei uma fila com %d elementos ordenados\n", N * N);
+
+  // retirar e destruir cada elemento da fila, em sequencia
+  for (i = 0; i < N * N; i++) {
+    aux = (filaint_t *)queue_remove((queue_t **)&fila0, (queue_t *)fila0);
+    assert(fila_correta(fila0));
+    assert(aux->id == i);
+  }
+  printf("Ok, retirei e destrui em ordem %d elementos da fila\n", N * N);
 
   printf("\nTestes de operações inválidas funcionaram!\n");
 

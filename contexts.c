@@ -44,51 +44,43 @@ void BodyPong(void *arg) {
   swap_context_asm(&ContextPong, &ContextMain);
 }
 
-/*****************************************************/
-void teste1(void) {  // main1(void){
-
-  //{
+void teste1(void) {
   char *stack;
 
-  //	int a;
-  //	a = 10;
-
-  UARTprintf("Main INICIO\n");
+  printf("Main INICIO\n");
 
   get_context_asm(&ContextPing);
 
   stack = malloc(10);
-  if (stack) {
-    ContextPing.uc_stack.ss_sp = stack;
-    ContextPing.uc_stack.ss_size = STACKSIZE;
-    ContextPing.uc_stack.ss_flags = 0;
-    ContextPing.uc_link = 0;
-  } else {
+  if (stack == NULL) {
     perror("Erro na criacao da pilha: ");
   }
+
+  ContextPing.uc_stack.ss_sp = stack;
+  ContextPing.uc_stack.ss_size = STACKSIZE;
+  ContextPing.uc_stack.ss_flags = 0;
+  ContextPing.uc_link = 0;
 
   makecontext(&ContextPing, (int)(*BodyPing), 1, "    Ping");
 
   get_context_asm(&ContextPong);
 
   stack = malloc(STACKSIZE);
-  if (stack) {
-    ContextPong.uc_stack.ss_sp = stack;
-    ContextPong.uc_stack.ss_size = STACKSIZE;
-    ContextPong.uc_stack.ss_flags = 0;
-    ContextPong.uc_link = 0;
-  } else {
-    perror("Erro na cria��o da pilha: ");
-    //      exit (1);
+  if (stack == NULL) {
+    perror("Erro na criacao da pilha: ");
   }
+
+  ContextPong.uc_stack.ss_sp = stack;
+  ContextPong.uc_stack.ss_size = STACKSIZE;
+  ContextPong.uc_stack.ss_flags = 0;
+  ContextPong.uc_link = 0;
 
   makecontext(&ContextPong, (int)(*BodyPong), 1, "        Pong");
 
   swap_context_asm(&ContextMain, &ContextPing);
   swap_context_asm(&ContextMain, &ContextPong);
 
-  UARTprintf("Main FIM\n");
+  printf("Main FIM\n");
 
-  //   exit (0);
   return;
 }

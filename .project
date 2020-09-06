@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>queue_ppos</name>
+	<name>PingPongOS</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -26,6 +26,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>drivers/pinout.c</name>
+			<type>1</type>
+			<locationURI>SW_ROOT/examples/boards/ek-tm4c1294xl/drivers/pinout.c</locationURI>
+		</link>
+		<link>
 			<name>utils/uartstdio.c</name>
 			<type>1</type>
 			<locationURI>SW_ROOT/utils/uartstdio.c</locationURI>
@@ -34,11 +39,6 @@
 			<name>utils/ustdlib.c</name>
 			<type>1</type>
 			<locationURI>SW_ROOT/utils/ustdlib.c</locationURI>
-		</link>
-		<link>
-			<name>drivers/pinout.c</name>
-			<type>1</type>
-			<locationURI>SW_ROOT/examples/boards/ek-tm4c1294xl/drivers/pinout.c</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>

@@ -14,8 +14,6 @@
 
 #define printf UARTprintf
 
-void testafila();
-
 // System clock rate in Hz.
 uint32_t g_ui32SysClock;
 
@@ -56,10 +54,10 @@ int main(void) {
   ConfigureUART();
 
   printf("***********************\n");
-  printf("* PingPong OS - Queue *\n");
+  printf("*     Ping Pong OS    *\n");
   printf("***********************\n");
 
-  testafila();
+  teste1();
 
   // We are finished.  Hang around flashing D1.
   while (1) {

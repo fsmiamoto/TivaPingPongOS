@@ -7,13 +7,6 @@
 
 ucontext_t ContextPing, ContextPong, ContextMain;
 
-/*****************************************************/
-
-int flag;
-int memPC = 0;
-
-//-D DEBUG -D gcc CFLAGS =-g -Wall -I. -mcpu=cortex-m4 -mfloat-abi=hard
-//-D DEBUG -D gcc CFLAGS =-g -Wall -I. -mcpu=cortex-m4 -mfloat-abi=hard
 void BodyPing(void *arg) {
   int i;
 
@@ -27,8 +20,6 @@ void BodyPing(void *arg) {
 
   swap_context_asm(&ContextPing, &ContextMain);
 }
-
-/*****************************************************/
 
 void BodyPong(void *arg) {
   int i;

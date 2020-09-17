@@ -24,7 +24,7 @@ void BodyTask(void *arg) {
 void teste_task_control_2() {
   int i;
 
-  UARTprintf("main: inicio\n");
+  UARTprintf("Teste 2: inicio\n");
 
   ppos_init();
 
@@ -32,5 +32,5 @@ void teste_task_control_2() {
 
   for (i = 1; i <= MAXTASK; i++) task_switch(&task[i]);
 
-  UARTprintf("main: fim\n");
+  UARTprintf("Teste 2: fim\n\n");
 }

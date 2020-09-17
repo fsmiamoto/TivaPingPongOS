@@ -58,8 +58,10 @@ int main(void) {
   printf("***********************\n");
 
   teste1();
-  teste_task_control_2();
-  teste_task_control_3();
+
+  teste_task_control_1();
+  //teste_task_control_2();
+  //teste_task_control_3();
 
   // We are finished.  Hang around flashing D1.
   while (1) {

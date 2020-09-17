@@ -5,6 +5,7 @@
 
 // Thread stack size
 #define STACKSIZE 4096
+#define perror UARTprintf
 
 #define getcontext get_context_asm
 #define swapcontext swap_context_asm
@@ -34,7 +35,7 @@ int task_create(task_t *task, void (*start_routine)(void *), void *arg) {
     task->context.uc_stack.ss_flags = 0;
     task->context.uc_link = 0;
   } else {
-    perror("task_create: error on stack allocation");
+    perror("task_create: error on stack allocation\n");
     return -1;
   }
 
@@ -44,7 +45,7 @@ int task_create(task_t *task, void (*start_routine)(void *), void *arg) {
   task->prev = current_task;
 
 #ifdef DEBUG
-  printf("task_create: created task %d\n", task->id);
+  UARTprintf("task_create: created task %d\n", task->id);
 #endif
 
   return task->id;
@@ -56,12 +57,12 @@ int task_switch(task_t *task) {
 
   int status = swapcontext(&(previous->context), &(task->context));
   if (status < 0) {
-    perror("task_switch: error on swapcontext call");
+    perror("task_switch: error on swapcontext call\n");
     return status;
   }
 
 #ifdef DEBUG
-  printf("task_switch: changing context %d -> %d\n", previous->id, task->id);
+  UARTprintf("task_switch: changing context %d -> %d\n", previous->id, task->id);
 #endif
 
   return 0;

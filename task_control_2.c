@@ -1,9 +1,6 @@
 #include "ppos.h"
 #define MAXTASK 10
 
-int memPC = 0;
-int flag;
-
 task_t task[MAXTASK + 1];
 
 // corpo das threads

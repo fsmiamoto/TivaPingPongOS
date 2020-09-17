@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "ppos_data.h"
 
-// Thread stack size
 #define STACKSIZE 4096
 #define perror UARTprintf
 
@@ -19,7 +15,6 @@ void ppos_init() {
   getcontext(&(main_task.context));
   main_task.next = NULL;
   main_task.prev = NULL;
-
   current_task = &main_task;
 }
 

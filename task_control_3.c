@@ -4,9 +4,6 @@
 
 // Teste da gestão básica de tarefas
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "ppos.h"
 
 #define MAXTASK3 10

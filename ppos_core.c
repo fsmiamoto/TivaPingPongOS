@@ -6,6 +6,9 @@
 // Thread stack size
 #define STACKSIZE 4096
 
+#define getcontext get_context_asm
+#define swapcontext swap_context_asm
+
 int next_task_id = 1;  // IDs for other tasks start at 1
 task_t main_task;
 task_t *current_task;

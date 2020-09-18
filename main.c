@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
@@ -52,12 +53,11 @@ int main(void) {
   ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
 
   ConfigureUART();
+  contexts();
 
   printf("***********************\n");
   printf("*     Ping Pong OS    *\n");
   printf("***********************\n");
-
-  teste1();
 
   teste_task_control_1();
   //teste_task_control_2();

@@ -57,7 +57,8 @@ int task_switch(task_t *task) {
   }
 
 #ifdef DEBUG
-  UARTprintf("task_switch: changing context %d -> %d\n", previous->id, task->id);
+  UARTprintf("task_switch: changing context %d -> %d\n", previous->id,
+             task->id);
 #endif
 
   return 0;

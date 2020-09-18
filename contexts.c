@@ -3,48 +3,30 @@
 
 #include "ucontext.h"
 
-#define STACKSIZE 4096 /* tamanho de pilha das threads */
+#define STACKSIZE 512
 
 ucontext_t ContextPing, ContextPong, ContextMain;
 
 void BodyPing(void *arg) {
-  int i;
-
-  UARTprintf("PING  %s iniciada\n", (char *)arg);
-
-  for (i = 0; i < 6; i++) {
-    UARTprintf("PING  %s %d\n", (char *)arg, i);
-    swap_context_asm(&ContextPing, &ContextPong);
-  }
-  UARTprintf("%s FIM\n", (char *)arg);
-
+  swap_context_asm(&ContextPing, &ContextPong);
   swap_context_asm(&ContextPing, &ContextMain);
 }
 
 void BodyPong(void *arg) {
-  int i;
-
-  UARTprintf("PONG  %s iniciada\n", (char *)arg);
-
-  for (i = 0; i < 6; i++) {
-    UARTprintf("PONG  %s %d\n", (char *)arg, i);
-    swap_context_asm(&ContextPong, &ContextPing);
-  }
-  UARTprintf("%s FIM\n", (char *)arg);
-
+  swap_context_asm(&ContextPong, &ContextPing);
   swap_context_asm(&ContextPong, &ContextMain);
 }
 
-void teste1(void) {
+void contexts(void) {
   char *stack;
 
   printf("Main INICIO\n");
 
   get_context_asm(&ContextPing);
 
-  stack = malloc(10);
+  stack = (char *)malloc(STACKSIZE);
   if (stack == NULL) {
-    perror("Erro na criacao da pilha: ");
+    UARTprintf("Erro na criacao da pilha\n");
   }
 
   ContextPing.uc_stack.ss_sp = stack;
@@ -56,9 +38,9 @@ void teste1(void) {
 
   get_context_asm(&ContextPong);
 
-  stack = malloc(STACKSIZE);
+  stack = (char *)malloc(STACKSIZE);
   if (stack == NULL) {
-    perror("Erro na criacao da pilha: ");
+    UARTprintf("Erro na criacao da pilha\n");
   }
 
   ContextPong.uc_stack.ss_sp = stack;
@@ -70,8 +52,4 @@ void teste1(void) {
 
   swap_context_asm(&ContextMain, &ContextPing);
   swap_context_asm(&ContextMain, &ContextPong);
-
-  printf("Main FIM\n");
-
-  return;
 }

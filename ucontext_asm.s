@@ -32,80 +32,6 @@ ucontext_t_initialized .set 24 * 4
 
    .global   get_context_asm
 get_context_asm:
-
-;	push     {lr}
-	str       r0,  [r0,#mcontext_t_regR0]
-	str.w       r1,  [r0,#mcontext_t_regR1]
-	str.w       r2,  [r0,#mcontext_t_regR2]
-	str.w       r3,  [r0,#mcontext_t_regR3]
-	str.w       r4,  [r0,#mcontext_t_regR4]
-	str.w       r5,  [r0,#mcontext_t_regR5]
-	str.w       r6,  [r0,#mcontext_t_regR6]
-	str.w       r7,  [r0,#mcontext_t_regR7]
-	str.w       r8,  [r0,#mcontext_t_regR8]
-	str.w       r9,  [r0,#mcontext_t_regR9]
-	str.w       r10, [r0,#mcontext_t_regR10]
-	str.w       r11, [r0,#mcontext_t_regR11]
-	str.w       r12, [r0,#mcontext_t_regR12]
-	str.w       r13, [r0,#mcontext_t_regR13]
-	str.w       r14, [r0,#mcontext_t_regR14]
-	push	  {r3}
-;	mov	      r3, #regR15
-;   mov       r3, r15
-    mov         r3, pc ; r15
-;   add       r3, #6
-	str.w       r3,  [r0,#mcontext_t_regR15]
-	pop       {r3}
-;	pop     {pc}
-    bx        lr ; return
-
-
-   .global set_context_asm
-set_context_asm:
-
-
-;//    push    {lr}
-	LDR	 r1 ,  [r0 ,#mcontext_t_regR1]
-    LDR  r2 ,  [r0 ,#mcontext_t_regR2]
-    LDR  r3 ,  [r0 ,#mcontext_t_regR3]
-    LDR  r4 ,  [r0 ,#mcontext_t_regR4]
-    LDR  r5 ,  [r0 ,#mcontext_t_regR5]
-    LDR  r6 ,  [r0 ,#mcontext_t_regR6]
-    LDR  r7 ,  [r0 ,#mcontext_t_regR7]
-    LDR  r8 ,  [r0 ,#mcontext_t_regR8]
-    LDR  r9 ,  [r0 ,#mcontext_t_regR9]
-    LDR  r10,  [r0 ,#mcontext_t_regR10]
-    LDR  r11,  [r0 ,#mcontext_t_regR11]
-    LDR  r12,  [r0 ,#mcontext_t_regR12]
-;//    LDR  r13,  [r0 ,#mcontext_t_regR13]
-    LDR  r14,  [r0 ,#mcontext_t_regR14]
-
-	LDR	 r1 ,  [r0 ,#ucontext_t_initialized]
-	CMP  r1 , #0
-	BNE  inicializado
-
-    ; ainda n„o inicializado
-    mov  r1,   #1
-	STR  r1 ,  [r0 ,#ucontext_t_initialized]
-	LDR	 r1 ,  [r0 ,#mcontext_t_regR1]
-	ldr  R13,  [r0 ,#stack_t_Pss_sp]
-    LDR  r15,  [r0 ,#ucontext_t_func]
-;//	pop     {pc}
-    bx     lr
-
-inicializado:
-	LDR	 r1 ,  [r0 ,#mcontext_t_regR1]
-    LDR  r13,  [r0 ,#mcontext_t_regR13]
-;    LDR  r15,  [r0 ,#mcontext_t_regR15]
-    LDR  r15,  [r0 ,#mcontext_t_regR14]
-;	pop     {pc}
-    bx     lr
-;	.end
-;////////////////////////  SWAP BEG /////////////////////
-;;;;;;;;;;;;;;;;;;;;;;;;;  SWAP BEG ;;;;;;;;;;;;;;;;;;;;;.global swap_context_asm
-    .global    swap_context_asm
-swap_context_asm:
-
 	str.w       r0,  [r0,#mcontext_t_regR0]
 	str.w       r1,  [r0,#mcontext_t_regR1]
 	str.w       r2,  [r0,#mcontext_t_regR2]
@@ -122,16 +48,72 @@ swap_context_asm:
 	str.w       r13, [r0,#mcontext_t_regR13]
 	str.w       r14, [r0,#mcontext_t_regR14]
 	push	  {r3}
-;	mov	      r3, #regR15
-;   mov       r3, r15
-    ;mov         r3, pc ; r15
+    mov         r3, pc
+	str.w       r3,  [r0,#mcontext_t_regPC]
+	mov r3, sp
+	str.w       r3,  [r0,#mcontext_t_regSP]
+	pop       {r3}
+    bx        lr ; return
+
+
+   .global set_context_asm
+set_context_asm:
+	ldr	 r1 ,  [r0 ,#mcontext_t_regR1]
+    ldr  r2 ,  [r0 ,#mcontext_t_regR2]
+    ldr  r3 ,  [r0 ,#mcontext_t_regR3]
+    ldr  r4 ,  [r0 ,#mcontext_t_regR4]
+    ldr  r5 ,  [r0 ,#mcontext_t_regR5]
+    ldr  r6 ,  [r0 ,#mcontext_t_regR6]
+    ldr  r7 ,  [r0 ,#mcontext_t_regR7]
+    ldr  r8 ,  [r0 ,#mcontext_t_regR8]
+    ldr  r9 ,  [r0 ,#mcontext_t_regR9]
+    ldr  r10,  [r0 ,#mcontext_t_regR10]
+    ldr  r11,  [r0 ,#mcontext_t_regR11]
+    ldr  r12,  [r0 ,#mcontext_t_regR12]
+    ldr  r13,  [r0 ,#mcontext_t_regR13]
+    ldr  r14,  [r0 ,#mcontext_t_regR14]
+
+	ldr	 r1 ,  [r0 ,#ucontext_t_initialized]
+	cmp  r1 , #0
+	bne  inicializado
+
+    ; ainda n√£o inicializado
+    mov  r1,   #1
+	STR  r1 ,  [r0 ,#ucontext_t_initialized]
+	LDR	 r1 ,  [r0 ,#mcontext_t_regR1]
+	ldr  R13,  [r0 ,#stack_t_Pss_sp]
+    LDR  r15,  [r0 ,#ucontext_t_func]
+    bx     lr
+
+inicializado:
+	LDR	 r1 ,  [r0 ,#mcontext_t_regR1]
+    LDR  r13,  [r0 ,#mcontext_t_regR13]
+;    LDR  r15,  [r0 ,#mcontext_t_regR15]
+    LDR  r15,  [r0 ,#mcontext_t_regR14]
+;	pop     {pc}
+    bx     lr
+
+    .global    swap_context_asm
+swap_context_asm:
+	str.w       r0,  [r0,#mcontext_t_regR0]
+	str.w       r1,  [r0,#mcontext_t_regR1]
+	str.w       r2,  [r0,#mcontext_t_regR2]
+	str.w       r3,  [r0,#mcontext_t_regR3]
+	str.w       r4,  [r0,#mcontext_t_regR4]
+	str.w       r5,  [r0,#mcontext_t_regR5]
+	str.w       r6,  [r0,#mcontext_t_regR6]
+	str.w       r7,  [r0,#mcontext_t_regR7]
+	str.w       r8,  [r0,#mcontext_t_regR8]
+	str.w       r9,  [r0,#mcontext_t_regR9]
+	str.w       r10, [r0,#mcontext_t_regR10]
+	str.w       r11, [r0,#mcontext_t_regR11]
+	str.w       r12, [r0,#mcontext_t_regR12]
+	str.w       r13, [r0,#mcontext_t_regR13]
+	str.w       r14, [r0,#mcontext_t_regR14]
+	push	  {r3}
     mov         r3, r15
- ;   add       r3, #6
 	str.w       r3,  [r0,#mcontext_t_regR15]
 	pop       {r3}
-;	pop     {pc}
-;    bx        lr //; return
-;///////////////////////  end get   beg set
 
 ;	//LDR	 r1 ,  [r1 ,#mcontext_t_regR1]
     LDR  r2 ,  [r1 ,#mcontext_t_regR2]
@@ -152,12 +134,12 @@ swap_context_asm:
 	CMP  r0 , #0
 	BNE  inicializado1
 
-    ; ainda n„o inicializado
+    ; ainda nao inicializado
     mov  r0,   #1
-	STR  r0 ,  [r1 ,#ucontext_t_initialized]
+	str  r0 ,  [r1 ,#ucontext_t_initialized]
 	;LDR	 r1 ,  [r1 ,#mcontext_t_regR1]
 	ldr  R13,  [r1 ,#stack_t_Pss_sp]
-    LDR  r0 ,  [r1 ,#mcontext_t_regR0] ;21_09_2017//
+    LDR  r0 ,  [r1 ,#mcontext_t_regR0]
     LDR  r15,  [r1 ,#ucontext_t_func]
     bx     lr
 
@@ -165,11 +147,9 @@ inicializado1:
 	;LDR	 r1 ,  [r1 ,#mcontext_t_regR1]
     LDR  r13,  [r1 ,#mcontext_t_regR13]
 ;    LDR  r15,  [r1 ,#mcontext_t_regR15]
-    LDR  r0 ,  [r1 ,#mcontext_t_regR0] ;21_09_2017//
+    LDR  r0 ,  [r1 ,#mcontext_t_regR0]
     LDR  r15,  [r1 ,#mcontext_t_regR14]
 ;	pop     {pc}
     bx     lr
-
-;;;;;;;;;;;;;;;;;  SWAP END ;;;;;;;;;;;;;;;;;;;
 
 

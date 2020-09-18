@@ -1,3 +1,4 @@
+// Aluno: Francisco S Miamoto - 1450522
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -59,6 +60,7 @@ int main(void) {
   printf("*     Ping Pong OS    *\n");
   printf("***********************\n");
 
+  // Descomente um teste de cada vez ;)
   teste_task_control_1();
   //teste_task_control_2();
   //teste_task_control_3();

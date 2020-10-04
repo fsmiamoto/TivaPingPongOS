@@ -30,3 +30,19 @@ void ConfigureUART(void) {
   // Initialize the UART for console I/O.
   UARTStdioConfig(0, 115200, g_ui32SysClock);
 }
+
+void SetupMain(){
+    // Run from the PLL at 120 MHz.
+      g_ui32SysClock = MAP_SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN |
+                                               SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480),
+                                              120E6);
+
+      // Configure the device pins.
+      PinoutSet(false, false);
+
+      // Enable the GPIO pins for the LED D1 (PN1).
+      ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
+
+      ConfigureUART();
+      contexts();
+}

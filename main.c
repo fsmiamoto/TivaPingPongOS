@@ -15,39 +15,20 @@
 #include "internal.h"
 #include "utils/uartstdio.h"
 
-#define printf UARTprintf
-
 // System clock rate in Hz.
 uint32_t g_ui32SysClock;
 
-// The error routine that is called if the driver library encounters an error.
-#ifdef DEBUG
-void __error__(char* pcFilename, uint32_t ui32Line) {}
-#endif
-
 int main(void) {
-  // Run from the PLL at 120 MHz.
-  g_ui32SysClock = MAP_SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN |
-                                           SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480),
-                                          120000000);
+  SetupMain();
 
-  // Configure the device pins.
-  PinoutSet(false, false);
-
-  // Enable the GPIO pins for the LED D1 (PN1).
-  ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
-
-  ConfigureUART();
-  contexts();
-
-  printf("***********************\n");
-  printf("*     Ping Pong OS    *\n");
-  printf("***********************\n");
+  UARTprintf("***********************\n");
+  UARTprintf("*     Ping Pong OS    *\n");
+  UARTprintf("***********************\n");
 
   // Descomente um teste de cada vez ;)
   // teste_task_control_1();
   teste_task_control_2();
-  // teste_task_control_3();
+  //teste_task_control_3();
 
   // We are finished.  Hang around flashing D1.
   while (1) {

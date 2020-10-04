@@ -1,5 +1,5 @@
-#include "internal.h"
 #include "ppos_data.h"
+#include "tiva_core.h"
 
 #define STACKSIZE 4096
 #define perror UARTprintf

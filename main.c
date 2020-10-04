@@ -1,13 +1,9 @@
 // PingPongOS - P2
 // Aluno: Francisco S Miamoto - 1450522
-#include "internal.h"
+#include "tiva_core.h"
 
 int main(void) {
   SetupMain();
-
-  UARTprintf("***********************\n");
-  UARTprintf("*     Ping Pong OS    *\n");
-  UARTprintf("***********************\n");
 
   // Descomente um teste de cada vez ;)
   // teste_task_control_1();

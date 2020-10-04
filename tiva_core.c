@@ -1,4 +1,4 @@
-#include "internal.h"
+#include "tiva_core.h"
 
 uint32_t g_ui32SysClock;
 

@@ -1,3 +1,7 @@
+#include <stdint.h>
+#include <stdlib.h>
+
+#include "internal.h"
 #include "ppos_data.h"
 
 #define STACKSIZE 4096

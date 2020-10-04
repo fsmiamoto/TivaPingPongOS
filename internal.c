@@ -1,18 +1,6 @@
 #include "internal.h"
 
-#include <stdbool.h>
-#include <stdint.h>
-
-#include "driverlib/gpio.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/rom.h"
-#include "driverlib/rom_map.h"
-#include "driverlib/sysctl.h"
-#include "driverlib/uart.h"
-#include "drivers/pinout.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
-#include "utils/uartstdio.h"
+uint32_t g_ui32SysClock;
 
 // Configure the UART and its pins.  This must be called before UARTprintf().
 void ConfigureUART(void) {
@@ -31,18 +19,22 @@ void ConfigureUART(void) {
   UARTStdioConfig(0, 115200, g_ui32SysClock);
 }
 
-void SetupMain(){
-    // Run from the PLL at 120 MHz.
-      g_ui32SysClock = MAP_SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN |
-                                               SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480),
-                                              120E6);
+void SetupMain() {
+  // Run from the PLL at 120 MHz.
+  g_ui32SysClock = MAP_SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN |
+                                           SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480),
+                                          120E6);
 
-      // Configure the device pins.
-      PinoutSet(false, false);
+  // Configure the device pins.
+  PinoutSet(false, false);
 
-      // Enable the GPIO pins for the LED D1 (PN1).
-      ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
+  // Enable the GPIO pins for the LED D1 (PN1).
+  ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
 
-      ConfigureUART();
-      contexts();
+  ConfigureUART();
+  contexts();
 }
+
+void WriteInternalLED(uint8_t onOrOff) { LEDWrite(CLP_D1, onOrOff); }
+
+void Delay(uint32_t ms) { SysCtlDelay(ms); }

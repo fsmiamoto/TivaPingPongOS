@@ -16,8 +16,8 @@
 // Veja um exemplo de uso desta estrutura em testafila.c
 
 typedef struct queue_t {
-  struct queue_t *prev; // aponta para o elemento anterior na fila
-  struct queue_t *next; // aponta para o elemento seguinte na fila
+  struct queue_t *prev;  // aponta para o elemento anterior na fila
+  struct queue_t *next;  // aponta para o elemento seguinte na fila
 } queue_t;
 
 //------------------------------------------------------------------------------
@@ -56,5 +56,21 @@ int queue_size(queue_t *queue);
 // void print_elem (void *ptr) ; // ptr aponta para o elemento a imprimir
 
 void queue_print(char *name, queue_t *queue, void print_elem(void *));
+
+//------------------------------------------------------------------------------
+// Percorre a fila aplicando a função a cada elemento da mesma
+//
+// O protótipo de func recebe um ponteiro para o elemento da fila
+// void func(void* ptr)
+
+void queue_foreach(queue_t *queue, void (*func)(void *));
+
+//------------------------------------------------------------------------------
+// Percorre a fila aplicando a função reducer a cada elemento da mesma
+//
+// O protótipo de func recebe um ponteiro para o acumulador e o elemento da fila
+// void* reducer(void* acc, void* elem)
+
+void *queue_reduce(queue_t *queue, void *acc, void *(*reduc)(void *, void *));
 
 #endif

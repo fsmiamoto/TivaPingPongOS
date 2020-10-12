@@ -7,17 +7,19 @@
 #ifndef __PPOS_DATA__
 #define __PPOS_DATA__
 
-#include "queue.h"    // biblioteca de filas genéricas
-#include "ucontext.h" // biblioteca de trocas de contexto
+#include "queue.h"     // biblioteca de filas genéricas
+#include "ucontext.h"  // biblioteca de trocas de contexto
 
 typedef enum { CREATED, READY, RUNNING, WAITING, TERMINATED } State;
 
 // Estrutura que define um Task Control Block (TCB)
 typedef struct task_t {
-  struct task_t *prev, *next; // ponteiros para usar em filas
-  int id;                     // identificador da tarefa
-  ucontext_t context;         // contexto armazenado da tarefa
+  struct task_t *prev, *next;  // ponteiros para usar em filas
+  int id;                      // identificador da tarefa
+  ucontext_t context;          // contexto armazenado da tarefa
   State state;
+  short prio;
+  short prio_d;
 } task_t;
 
 // estrutura que define um semáforo

@@ -20,11 +20,11 @@
 // System clock rate in Hz.
 extern uint32_t g_ui32SysClock;
 
-extern void ConfigureUART(void);
+extern void TivaInit();
 extern void UARTprintf(const char *pcString, ...);
-extern void SetupMain();
-extern void delay(uint32_t ms);
-
 extern void WriteInternalLED(uint8_t onOrOff);
 extern void Delay(uint32_t ms);
+
+extern void __configure_uart(void);
+
 #endif

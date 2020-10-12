@@ -76,7 +76,7 @@ swap_context_asm:
 	str.w    r4,  [r0, #mcontext_t_regSP]
     mov      r4,  lr
 	str.w    r4,  [r0, #mcontext_t_regLR]
-	mov      r4,  PC
+	mov      r4,  pc
 	str.w    r4,  [r0, #mcontext_t_regPC]
 	mrs      r4,  xpsr
 	str.w    r4,  [r0, #mcontext_t_regXPSR]

@@ -117,6 +117,25 @@ void queue_print(char *name, queue_t *queue, void (*print_elem)(void *)) {
   printf("]\n");
 }
 
+void queue_foreach(queue_t *queue, void (*func)(void *)) {
+  int i;
+  queue_t *current = queue;
+  for (i = 0; i < queue_size(queue); i++) {
+    func(current);
+    current = current->next;
+  }
+}
+
+void *queue_reduce(queue_t *queue, void *acc, void *(*func)(void *, void *)) {
+  int i;
+  queue_t *current = queue;
+  for (i = 0; i < queue_size(queue); i++) {
+    acc = func(acc, current);
+    current = current->next;
+  }
+  return acc;
+}
+
 // Returns the last element in the queue
 queue_t *__get_last_elem(queue_t **queue) {
   if (*queue == NULL) {

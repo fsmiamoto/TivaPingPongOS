@@ -5,9 +5,10 @@
 int main(void) {
   SetupMain();
 
+  UARTprintf("PingPongOS\n");
   // Descomente um teste de cada vez ;)
-  // teste_task_control_1();
-  teste_task_control_2();
+  teste_task_control_1();
+  //teste_task_control_2();
   // teste_task_control_3();
 
   // We are finished.  Hang around flashing D1.

@@ -11,24 +11,24 @@ task_t Ping, Pong;
 // corpo da thread Ping
 void BodyPing1(void *arg) {
   int i;
-  UARTprintf("Ping: inicio\n");
+  UARTprintf("%s: inicio\n", arg);
   for (i = 0; i < 4; i++) {
-    UARTprintf("Ping: %d\n", i);
+    UARTprintf("%s: %d\n", arg, i);
     task_switch(&Pong);
   }
-  UARTprintf("Ping: fim\n");
+  UARTprintf("%s: fim\n");
   task_exit(0);
 }
 
 // corpo da thread Pong
 void BodyPong1(void *arg) {
   int i;
-  UARTprintf("Pong: inicio\n");
+  UARTprintf("%s: inicio\n", arg);
   for (i = 0; i < 4; i++) {
-    UARTprintf("Pong: %d\n", i);
+    UARTprintf("%s: %d\n", arg, i);
     task_switch(&Ping);
   }
-  UARTprintf("Pong: fim\n");
+  UARTprintf("%s: fim\n", arg);
   task_exit(0);
 }
 

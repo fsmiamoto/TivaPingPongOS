@@ -51,17 +51,18 @@ int task_switch(task_t *task) {
   task_t *previous = current_task;
   current_task = task;
 
-  int status = swapcontext(&(previous->context), &(task->context));
-  if (status < 0) {
-    perror("task_switch: error on swapcontext call\n");
-    return status;
-  }
-
 #ifdef DEBUG
   UARTprintf("task_switch: changing context %d -> %d\n", previous->id,
              task->id);
 #endif
 
+  int status = swapcontext(&(previous->context), &(current_task->context));
+  if (status < 0) {
+    perror("task_switch: error on swapcontext call\n");
+    return status;
+  }
+
+  UARTprintf("Voltou!\n");
   return 0;
 }
 

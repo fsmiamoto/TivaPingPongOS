@@ -8,9 +8,6 @@ typedef struct stack_t {
 } stack_t;
 
 typedef struct mcontext_t {
-  int regPC;    // program counter
-  int regSP;    // stack pointer
-  int regCPSR;  // status register
   int regR0;
   int regR1;
   int regR2;
@@ -24,9 +21,10 @@ typedef struct mcontext_t {
   int regR10;
   int regR11;
   int regR12;
-  int regR13;
-  int regR14;
-  int regR15;
+  int regSP;
+  int regLR;
+  int regPC;
+  int regXPSR;
 } mcontext_t;
 
 typedef struct ucontext_t {
@@ -35,6 +33,7 @@ typedef struct ucontext_t {
   mcontext_t uc_mcontext;
   int func;
   int initialized;
+  char* arg;
 } ucontext_t;
 
 extern int getcontext(ucontext_t *);

@@ -32,7 +32,7 @@ void SetupMain() {
   ROM_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_1);
 
   ConfigureUART();
-  contexts();
+  //contexts();
 }
 
 void WriteInternalLED(uint8_t onOrOff) { LEDWrite(CLP_D1, onOrOff); }

@@ -8,6 +8,9 @@ typedef struct stack_t {
 } stack_t;
 
 typedef struct mcontext_t {
+  int regPC;    // program counter
+  int regSP;    // stack pointer
+  int regCPSR;  // status register
   int regR0;
   int regR1;
   int regR2;
@@ -21,10 +24,9 @@ typedef struct mcontext_t {
   int regR10;
   int regR11;
   int regR12;
-  int regSP;
-  int regLR;
-  int regPC;
-  int regXPSR;
+  int regR13;
+  int regR14;
+  int regR15;
 } mcontext_t;
 
 typedef struct ucontext_t {
@@ -33,21 +35,18 @@ typedef struct ucontext_t {
   mcontext_t uc_mcontext;
   int func;
   int initialized;
-  char* arg;
 } ucontext_t;
 
-extern int getcontext(ucontext_t *);
 extern int get_context_asm(ucontext_t *);
-
-extern int setcontext(ucontext_t *);
 extern int set_context_asm(ucontext_t *);
-
-extern void makecontext(ucontext_t *context, int bodyAdress, int n_parms,
-                        char *parm);
-
-extern void setgearclock(int);
-
-extern int swapcontext(ucontext_t *, ucontext_t *);
 extern int swap_context_asm(ucontext_t *, ucontext_t *);
+
+int getcontext(ucontext_t *);
+int setcontext(ucontext_t *);
+int swapcontext(ucontext_t *, ucontext_t *);
+void makecontext(ucontext_t *context, int bodyAddress, int n_params,
+                 char *param);
+
+void setgearclock(int);
 
 #endif

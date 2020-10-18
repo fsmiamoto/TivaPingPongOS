@@ -1,8 +1,7 @@
 #include "ppos.h"
 #include "ppos_data.h"
 
-#define DEBUG
-#define STACKSIZE 4096
+#define STACKSIZE 512
 #define SCHEDULER_AGING_ALPHA 1
 
 #define perror UARTprintf
@@ -64,19 +63,20 @@ void dispatcher() {
 
 void ppos_init() {
   main_task.id = 0;
-  getcontext(&(main_task.context));
   main_task.next = NULL;
   main_task.prev = NULL;
 
+  getcontext(&(main_task.context));
+
   current_task = &main_task;
 
-  task_create(&dispatcher_task, (void*)dispatcher, NULL);
+  task_create(&dispatcher_task, (void *)dispatcher, NULL);
 }
 
 int task_create(task_t *task, void (*start_routine)(void *), void *arg) {
   getcontext(&(task->context));
 
-  char *stack = (char*)malloc(STACKSIZE);
+  char *stack = (char *)malloc(STACKSIZE);
   if (stack) {
     task->context.uc_stack.ss_sp = stack;
     task->context.uc_stack.ss_size = STACKSIZE;
@@ -116,11 +116,7 @@ int task_switch(task_t *task) {
   printf("task_switch: changing context %d -> %d\n", previous->id, task->id);
 #endif
 
-  int status = swapcontext(&(previous->context), &(current_task->context));
-  if (status < 0) {
-    printf("task_switch: error on swapcontext call");
-    return status;
-  }
+  swapcontext(&(previous->context), &(task->context));
 
   return 0;
 }

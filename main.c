@@ -23,7 +23,6 @@ int main(void) {
   TivaInit();
 
   UARTprintf("PingPongOS\n");
-
   UARTprintf("main: inicio\n");
 
   ppos_init();

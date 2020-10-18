@@ -37,18 +37,16 @@ typedef struct ucontext_t {
   int initialized;
 } ucontext_t;
 
-extern int getcontext(ucontext_t *);
 extern int get_context_asm(ucontext_t *);
-
-extern int setcontext(ucontext_t *);
 extern int set_context_asm(ucontext_t *);
-
-extern void makecontext(ucontext_t *context, int bodyAdress, int n_parms,
-                        char *parm);
-
-extern void setgearclock(int);
-
-extern int swapcontext(ucontext_t *, ucontext_t *);
 extern int swap_context_asm(ucontext_t *, ucontext_t *);
+
+int getcontext(ucontext_t *);
+int setcontext(ucontext_t *);
+int swapcontext(ucontext_t *, ucontext_t *);
+void makecontext(ucontext_t *context, int bodyAddress, int n_params,
+                 char *param);
+
+void setgearclock(int);
 
 #endif

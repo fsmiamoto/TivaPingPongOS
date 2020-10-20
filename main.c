@@ -4,7 +4,7 @@
 #include "ppos.h"
 #include "tiva_core.h"
 
-#define WORKLOAD 4000
+#define WORKLOAD 10000
 
 task_t Pang, Peng, Ping, Pong, Pung;
 

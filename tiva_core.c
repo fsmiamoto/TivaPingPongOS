@@ -1,9 +1,14 @@
 #include "tiva_core.h"
 
+#include "ppos.h"
+
 uint32_t g_ui32SysClock;
 uint32_t g_ui32Flags;
 
 extern unsigned int system_tick_count;
+extern task_t* current_task;
+
+void ppos_tick_handler();
 
 void TivaInit() {
   // Run from the PLL at 120 MHz.
@@ -97,7 +102,6 @@ void Timer0IntHandler(void) {
 // The interrupt handler for the second timer interrupt.
 void Timer1IntHandler(void) {
   char cOne, cTwo;
-  system_tick_count++;
 
   // Clear the timer interrupt.
   ROM_TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);
@@ -113,4 +117,19 @@ void Timer1IntHandler(void) {
   cOne = HWREGBITW(&g_ui32Flags, 0) ? '1' : '0';
   cTwo = HWREGBITW(&g_ui32Flags, 1) ? '1' : '0';
   ROM_IntMasterEnable();
+
+  ppos_tick_handler();
+}
+
+void ppos_tick_handler() {
+  system_tick_count++;
+  current_task->tick_count++;
+
+  if (current_task->is_system_task) return;
+
+  current_task->tick_budget -= 1;
+
+  if (current_task->tick_budget == 0) {
+    task_yield();
+  }
 }

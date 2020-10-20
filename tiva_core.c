@@ -2,7 +2,8 @@
 
 uint32_t g_ui32SysClock;
 uint32_t g_ui32Flags;
-extern unsigned int system_ticks_count;
+
+extern unsigned int system_tick_count;
 
 void TivaInit() {
   // Run from the PLL at 120 MHz.
@@ -96,7 +97,7 @@ void Timer0IntHandler(void) {
 // The interrupt handler for the second timer interrupt.
 void Timer1IntHandler(void) {
   char cOne, cTwo;
-  system_ticks_count++;
+  system_tick_count++;
 
   // Clear the timer interrupt.
   ROM_TimerIntClear(TIMER1_BASE, TIMER_TIMA_TIMEOUT);

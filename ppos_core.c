@@ -13,7 +13,9 @@
 void *__highest_prio_task(void *prev, void *next);
 void __apply_aging(void *ptr);
 
-int next_task_id = 1;  // IDs for other tasks start at 1
+unsigned int next_task_id = 1;  // IDs for other tasks start at 1
+unsigned int system_tick_count = 0;
+
 task_t main_task;
 task_t dispatcher_task;
 task_t *current_task;
@@ -62,7 +64,7 @@ void dispatcher() {
 }
 
 void ppos_init() {
-  task_create(&main_task,0,NULL);
+  task_create(&main_task, 0, NULL);
   main_task.context.initialized = 1;
 
   current_task = &main_task;
@@ -162,6 +164,8 @@ int task_getprio(task_t *task) {
 
   return (int)task->prio;
 }
+
+unsigned int systime() { return system_tick_count; }
 
 // Return the task with the highest priority
 void *__highest_prio_task(void *prev, void *next) {

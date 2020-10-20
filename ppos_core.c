@@ -62,11 +62,8 @@ void dispatcher() {
 }
 
 void ppos_init() {
-  main_task.id = 0;
-  main_task.next = NULL;
-  main_task.prev = NULL;
-
-  getcontext(&(main_task.context));
+  task_create(&main_task,0,NULL);
+  main_task.context.initialized = 1;
 
   current_task = &main_task;
 
@@ -100,7 +97,7 @@ int task_create(task_t *task, void (*start_routine)(void *), void *arg) {
   printf("task_create: created task %d\n", task->id);
 #endif
 
-  if (task != &dispatcher_task) {
+  if (task != &dispatcher_task && task != &main_task) {
     task->state = READY;
     queue_append((queue_t **)&queues[READY], (queue_t *)task);
   }

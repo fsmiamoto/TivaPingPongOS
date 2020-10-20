@@ -3,7 +3,6 @@
 // startup_ccs.c - Startup code for use with TI's Code Composer Studio.
 //
 // Copyright (c) 2013-2017 Texas Instruments Incorporated.  All rights reserved.
-// Software License Agreement
 //
 // Texas Instruments (TI) is supplying this software for use solely and
 // exclusively on TI's microcontroller products. The software is owned by
@@ -54,6 +53,14 @@ extern uint32_t __STACK_TOP;
 
 //*****************************************************************************
 //
+// External declarations for the interrupt handlers used by the application.
+//
+//*****************************************************************************
+extern void Timer0IntHandler(void);
+extern void Timer1IntHandler(void);
+
+//*****************************************************************************
+//
 // The vector table.  Note that the proper constructs must be placed on this to
 // ensure that it ends up at physical address 0x0000.0000 or at the start of
 // the program if located at a start address other than 0.
@@ -97,9 +104,9 @@ void (*const g_pfnVectors[])(void) = {
     IntDefaultHandler,  // ADC Sequence 2
     IntDefaultHandler,  // ADC Sequence 3
     IntDefaultHandler,  // Watchdog timer
-    IntDefaultHandler,  // Timer 0 subtimer A
+    Timer0IntHandler,   // Timer 0 subtimer A
     IntDefaultHandler,  // Timer 0 subtimer B
-    IntDefaultHandler,  // Timer 1 subtimer A
+    Timer1IntHandler,   // Timer 1 subtimer A
     IntDefaultHandler,  // Timer 1 subtimer B
     IntDefaultHandler,  // Timer 2 subtimer A
     IntDefaultHandler,  // Timer 2 subtimer B

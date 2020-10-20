@@ -10,16 +10,21 @@
 #include "queue.h"     // biblioteca de filas genéricas
 #include "ucontext.h"  // biblioteca de trocas de contexto
 
-typedef enum { CREATED, READY, RUNNING, WAITING, TERMINATED } State;
+typedef enum { CREATED, READY, RUNNING, WAITING, TERMINATED } state_t;
 
 // Estrutura que define um Task Control Block (TCB)
 typedef struct task_t {
   struct task_t *prev, *next;  // ponteiros para usar em filas
   int id;                      // identificador da tarefa
   ucontext_t context;          // contexto armazenado da tarefa
-  State state;
+  state_t state;
   short prio;
   short prio_d;
+  short is_system_task;      // indica se a tarefa é de sistema
+  unsigned int tick_budget;  // quantidade de ticks disponíveis
+  unsigned int tick_count;   // contagem de ticks disponíveis
+  unsigned int activations;
+  unsigned int start_tick;
 } task_t;
 
 // estrutura que define um semáforo

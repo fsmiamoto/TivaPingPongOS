@@ -40,6 +40,7 @@ typedef struct ucontext_t {
 extern int get_context_asm(ucontext_t *);
 extern int set_context_asm(ucontext_t *);
 extern int swap_context_asm(ucontext_t *, ucontext_t *);
+extern void change_add_asm();
 
 int getcontext(ucontext_t *);
 int setcontext(ucontext_t *);

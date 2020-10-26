@@ -84,7 +84,7 @@ set_context_asm:
 	CMP  r1 , #0
 	BNE  inicializado
 
-    ; ainda não inicializado
+    ; ainda nï¿½o inicializado
     mov  r1,   #1
 	STR  r1 ,  [r0 ,#ucontext_t_initialized]
 	LDR	 r1 ,  [r0 ,#mcontext_t_regR1]
@@ -152,7 +152,7 @@ swap_context_asm:
 	CMP  r0 , #0
 	BNE  inicializado1
 
-    ; ainda não inicializado
+    ; ainda nï¿½o inicializado
     mov  r0,   #1
 	STR  r0 ,  [r1 ,#ucontext_t_initialized]
 	;LDR	 r1 ,  [r1 ,#mcontext_t_regR1]
@@ -171,5 +171,11 @@ inicializado1:
     bx     lr
 
 ;;;;;;;;;;;;;;;;;  SWAP END ;;;;;;;;;;;;;;;;;;;
+	.global	 change_add_asm
+change_add_asm:
+	add sp, #40
+	str r0, [sp]
+	sub sp, #40
+	bx  lr
 
 

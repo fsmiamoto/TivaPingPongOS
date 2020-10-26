@@ -13,7 +13,9 @@
 void *__highest_prio_task(void *prev, void *next);
 void __apply_aging(void *ptr);
 
-int next_task_id = 1;  // IDs for other tasks start at 1
+unsigned int next_task_id = 1;  // IDs for other tasks start at 1
+unsigned int system_tick_count = 0;
+
 task_t main_task;
 task_t dispatcher_task;
 task_t *current_task;
@@ -43,26 +45,32 @@ task_t *scheduler() {
 
 void dispatcher() {
   while (1) {
-    task_t *next_ready = scheduler();
-    if (next_ready == NULL) {
+    dispatcher_task.activations++;
+
+    task_t *next = scheduler();
+    if (next == NULL) {
       break;
     }
 
 #ifdef DEBUG
-    printf("dispatcher: dispatching task %d\n", next_ready->id);
+    printf("dispatcher: dispatching task %d\n", next->id);
 #endif
-    queue_remove((queue_t **)&queues[READY], (queue_t *)next_ready);
-    next_ready->state = RUNNING;
-    task_switch(next_ready);
+    queue_remove((queue_t **)&queues[READY], (queue_t *)next);
 
-    queue_append((queue_t **)&queues[next_ready->state], (queue_t *)next_ready);
+    next->state = RUNNING;
+    next->tick_budget = 20;
+    next->activations += 1;
+
+    task_switch(next);
+
+    queue_append((queue_t **)&queues[next->state], (queue_t *)next);
   }
 
   task_exit(0);
 }
 
 void ppos_init() {
-  task_create(&main_task,0,NULL);
+  task_create(&main_task, 0, NULL);
   main_task.context.initialized = 1;
 
   current_task = &main_task;
@@ -87,11 +95,14 @@ int task_create(task_t *task, void (*start_routine)(void *), void *arg) {
   makecontext(&(task->context), (void *)start_routine, 1, arg);
 
   task->id = next_task_id++;
+  task->start_tick = systime();
+  task->activations = 0;
   task->prev = NULL;
   task->next = NULL;
   task->state = CREATED;
   task->prio = 0;
   task->prio_d = 0;
+  task->is_system_task = 0;
 
 #ifdef DEBUG
   printf("task_create: created task %d\n", task->id);
@@ -122,6 +133,12 @@ void task_exit(int exit_code) {
 #ifdef DEBUG
   printf("task_exit: exiting task %d\n", current_task->id);
 #endif
+
+  printf(
+      "Task %d exit: execution time  %4d ticks, processor time  %4d ticks, %4d "
+      "activations\n",
+      current_task->id, systime() - current_task->start_tick,
+      current_task->tick_count, current_task->activations);
 
   if (current_task == &dispatcher_task) {
     task_switch(&main_task);
@@ -163,6 +180,8 @@ int task_getprio(task_t *task) {
   return (int)task->prio;
 }
 
+unsigned int systime() { return system_tick_count; }
+
 // Return the task with the highest priority
 void *__highest_prio_task(void *prev, void *next) {
   if (prev == NULL) return next;
@@ -170,7 +189,7 @@ void *__highest_prio_task(void *prev, void *next) {
   task_t *prev_task = (task_t *)prev;
   task_t *next_task = (task_t *)next;
 
-  if (next_task->prio_d <= prev_task->prio_d) {
+  if (next_task->prio_d < prev_task->prio_d) {
     return next;
   }
 

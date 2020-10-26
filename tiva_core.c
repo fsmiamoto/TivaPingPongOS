@@ -6,6 +6,7 @@ uint32_t g_ui32SysClock;
 uint32_t g_ui32Flags;
 
 extern unsigned int system_tick_count;
+extern void change_add_asm();
 extern task_t* current_task;
 
 void ppos_tick_handler();
@@ -130,6 +131,6 @@ void ppos_tick_handler() {
   current_task->tick_budget -= 1;
 
   if (current_task->tick_budget == 0) {
-    task_yield();
+    change_add_asm(&task_yield);
   }
 }

@@ -39,8 +39,8 @@ void TivaInit() {
   //
   ROM_TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
   ROM_TimerConfigure(TIMER1_BASE, TIMER_CFG_PERIODIC);
-  ROM_TimerLoadSet(TIMER0_BASE, TIMER_A, g_ui32SysClock);
-  ROM_TimerLoadSet(TIMER1_BASE, TIMER_A, g_ui32SysClock / 2);
+  ROM_TimerLoadSet(TIMER0_BASE, TIMER_A, g_ui32SysClock / 10);
+  ROM_TimerLoadSet(TIMER1_BASE, TIMER_A, g_ui32SysClock / 20);
 
   //
   // Setup the interrupts for the timer timeouts.

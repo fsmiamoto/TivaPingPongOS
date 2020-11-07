@@ -1,17 +1,6 @@
 #include "ppos.h"
 #include "ppos_data.h"
-
-#define STACKSIZE 512
-#define SCHEDULER_AGING_ALPHA 1
-
-#define perror UARTprintf
-#define printf UARTprintf
-#define getcontext get_context_asm
-#define swapcontext swap_context_asm
-
-// Internal functions
-void *__highest_prio_task(void *prev, void *next);
-void __apply_aging(void *ptr);
+#include "ppos_internal.h"
 
 unsigned int next_task_id = 1;  // IDs for other tasks start at 1
 unsigned int system_tick_count = 0;
@@ -23,10 +12,6 @@ task_t *current_task;
 // Task queues for each state:
 // Created, Ready, Running, Waiting, Terminated
 task_t *queues[] = {NULL, NULL, NULL, NULL, NULL};
-
-// Internal functions
-void *__highest_prio_task(void *prev, void *next);
-void __apply_aging(void *ptr);
 
 task_t *scheduler() {
   if (queue_size((queue_t *)queues[READY]) == 0) {
@@ -181,23 +166,3 @@ int task_getprio(task_t *task) {
 }
 
 unsigned int systime() { return system_tick_count; }
-
-// Return the task with the highest priority
-void *__highest_prio_task(void *prev, void *next) {
-  if (prev == NULL) return next;
-
-  task_t *prev_task = (task_t *)prev;
-  task_t *next_task = (task_t *)next;
-
-  if (next_task->prio_d < prev_task->prio_d) {
-    return next;
-  }
-
-  return prev_task;
-}
-
-// Apply the aging factor on tasks
-void __apply_aging(void *ptr) {
-  task_t *task = (task_t *)ptr;
-  task->prio_d -= SCHEDULER_AGING_ALPHA;
-}

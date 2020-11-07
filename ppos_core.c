@@ -19,7 +19,13 @@ void ppos_init() {
   main_task.id = 0;
   main_task.next = NULL;
   main_task.prev = NULL;
+  main_task.prio = 0;
+  main_task.prio_d = 0;
   main_task.preemptible = 1;
+  main_task.activations = 0;
+  main_task.start_tick = systime();
+  main_task.state = READY;
+  queue_append((queue_t **)&queues[READY], (queue_t *)&main_task);
 
   current_task = &main_task;
 
@@ -94,6 +100,15 @@ void task_exit(int exit_code) {
   }
 
   current_task->state = TERMINATED;
+  current_task->exit_code = exit_code;
+
+  // Wakeup the waiting tasks
+  while (queue_size((queue_t *)current_task->waiting) > 0) {
+    queue_t *task = queue_remove((queue_t **)&current_task->waiting,
+                                 (queue_t *)current_task->waiting);
+    queue_append((queue_t **)&queues[READY], task);
+  }
+
   task_switch(&dispatcher_task);
 }
 
@@ -106,6 +121,14 @@ void task_yield() {
 
   current_task->state = READY;
   task_switch(&dispatcher_task);
+}
+
+int task_join(task_t *task) {
+  if (task->state == TERMINATED) return task->exit_code;
+  current_task->state = WAITING;
+  queue_append((queue_t **)&task->waiting, (queue_t *)current_task);
+  task_switch(&dispatcher_task);
+  return task->exit_code;
 }
 
 void task_setprio(task_t *task, int prio) {
@@ -160,12 +183,13 @@ void dispatcher() {
     queue_remove((queue_t **)&queues[READY], (queue_t *)next);
 
     next->state = RUNNING;
-    next->tick_budget = 20;
+    next->tick_budget = DEFAULT_TICK_BUDGET;
     next->activations += 1;
 
     task_switch(next);
 
-    queue_append((queue_t **)&queues[next->state], (queue_t *)next);
+    if (next->next == NULL && next->prev == NULL)
+      queue_append((queue_t **)&queues[next->state], (queue_t *)next);
   }
 
   task_exit(0);

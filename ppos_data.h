@@ -17,14 +17,16 @@ typedef struct task_t {
   struct task_t *prev, *next;  // ponteiros para usar em filas
   int id;                      // identificador da tarefa
   ucontext_t context;          // contexto armazenado da tarefa
-  state_t state;
-  short prio;
-  short prio_d;
-  short is_system_task;      // indica se a tarefa é de sistema
+  state_t state;               // estado atual da tarefa
+  short prio;                  // prioridade estática da tarefa
+  short prio_d;       // prioridade dinâmica da tarefa (afetada pelo aging)
+  short preemptible;  // indica se a tarefa é preemptável
   unsigned int tick_budget;  // quantidade de ticks disponíveis
   unsigned int tick_count;   // contagem de ticks disponíveis
   unsigned int activations;
   unsigned int start_tick;
+  struct task_t *waiting;
+  int exit_code;
 } task_t;
 
 // estrutura que define um semáforo

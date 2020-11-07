@@ -126,7 +126,7 @@ void ppos_tick_handler() {
   system_tick_count++;
   current_task->tick_count++;
 
-  if (current_task->is_system_task) return;
+  if (!current_task->preemptible) return;
 
   current_task->tick_budget -= 1;
 

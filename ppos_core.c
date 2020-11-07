@@ -13,50 +13,13 @@ task_t *current_task;
 // Created, Ready, Running, Waiting, Terminated
 task_t *queues[] = {NULL, NULL, NULL, NULL, NULL};
 
-task_t *scheduler() {
-  if (queue_size((queue_t *)queues[READY]) == 0) {
-    return NULL;
-  }
-
-  task_t *chosen = (task_t *)queue_reduce((queue_t *)queues[READY], NULL,
-                                          __highest_prio_task);
-
-  queue_foreach((queue_t *)queues[READY], __apply_aging);
-
-  chosen->prio_d = chosen->prio;
-
-  return chosen;
-}
-
-void dispatcher() {
-  while (1) {
-    dispatcher_task.activations++;
-
-    task_t *next = scheduler();
-    if (next == NULL) {
-      break;
-    }
-
-#ifdef DEBUG
-    printf("dispatcher: dispatching task %d\n", next->id);
-#endif
-    queue_remove((queue_t **)&queues[READY], (queue_t *)next);
-
-    next->state = RUNNING;
-    next->tick_budget = 20;
-    next->activations += 1;
-
-    task_switch(next);
-
-    queue_append((queue_t **)&queues[next->state], (queue_t *)next);
-  }
-
-  task_exit(0);
-}
-
 void ppos_init() {
   task_create(&main_task, 0, NULL);
   main_task.context.initialized = 1;
+  main_task.id = 0;
+  main_task.next = NULL;
+  main_task.prev = NULL;
+  main_task.preemptible = 1;
 
   current_task = &main_task;
 
@@ -87,7 +50,7 @@ int task_create(task_t *task, void (*start_routine)(void *), void *arg) {
   task->state = CREATED;
   task->prio = 0;
   task->prio_d = 0;
-  task->is_system_task = 0;
+  task->preemptible = 1;
 
 #ifdef DEBUG
   printf("task_create: created task %d\n", task->id);
@@ -166,3 +129,44 @@ int task_getprio(task_t *task) {
 }
 
 unsigned int systime() { return system_tick_count; }
+
+task_t *scheduler() {
+  if (queue_size((queue_t *)queues[READY]) == 0) {
+    return NULL;
+  }
+
+  task_t *chosen = (task_t *)queue_reduce((queue_t *)queues[READY], NULL,
+                                          __highest_prio_task);
+
+  queue_foreach((queue_t *)queues[READY], __apply_aging);
+
+  chosen->prio_d = chosen->prio;
+
+  return chosen;
+}
+
+void dispatcher() {
+  while (1) {
+    dispatcher_task.activations++;
+
+    task_t *next = scheduler();
+    if (next == NULL) {
+      break;
+    }
+
+#ifdef DEBUG
+    printf("dispatcher: dispatching task %d\n", next->id);
+#endif
+    queue_remove((queue_t **)&queues[READY], (queue_t *)next);
+
+    next->state = RUNNING;
+    next->tick_budget = 20;
+    next->activations += 1;
+
+    task_switch(next);
+
+    queue_append((queue_t **)&queues[next->state], (queue_t *)next);
+  }
+
+  task_exit(0);
+}

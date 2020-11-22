@@ -25,7 +25,6 @@ void ppos_init() {
   main_task.activations = 0;
   main_task.start_tick = systime();
   main_task.state = READY;
-  queue_append((queue_t **)&queues[READY], (queue_t *)&main_task);
 
   current_task = &main_task;
 
